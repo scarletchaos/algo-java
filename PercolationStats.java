@@ -6,7 +6,7 @@ import edu.princeton.cs.algs4.StdRandom;
  *  Last modified:     October 16, 1842
  **************************************************************************** */
 public class PercolationStats {
-    double[] results;
+    private double[] results;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
@@ -25,7 +25,7 @@ public class PercolationStats {
         double res = 0;
         int n = results.length;
         for (int i = 0; i < n; i++) {
-            res += (double) results[i] / n;
+            res += results[i] / n;
         }
         return res;
     }

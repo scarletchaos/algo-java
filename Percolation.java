@@ -7,10 +7,10 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    WeightedQuickUnionUF unionFind;
-    boolean[] opened;
-    int N;
-    int openSites;
+    private WeightedQuickUnionUF unionFind;
+    private boolean[] opened;
+    private int N;
+    private int openSites;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -24,7 +24,7 @@ public class Percolation {
         opened[N * N + 1] = true;
     }
 
-    public int rowColToIndex(int row, int col) {
+    private int rowColToIndex(int row, int col) {
         return row * N + col + 1;
     }
 
@@ -72,7 +72,7 @@ public class Percolation {
             throw new IllegalArgumentException("Row should be between 0 and N-1");
         if (col < 0 || col >= N)
             throw new IllegalArgumentException("Row should be between 0 and N-1");
-        return unionFind.connected(0, rowColToIndex(row, col));
+        return unionFind.find(0) == unionFind.find(rowColToIndex(row, col));
     }
 
     // returns the number of open sites
@@ -82,7 +82,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return unionFind.connected(0, N * N + 1);
+        return unionFind.find(0) == unionFind.find(N * N + 1);
     }
 
     // test client (optional)
