@@ -1,5 +1,5 @@
 /* *****************************************************************************
- *  Name:              Ada Lovelace
+ *  name:              Ada Lovelace
  *  Coursera User ID:  123456
  *  Last modified:     October 16, 1842
  **************************************************************************** */
@@ -9,69 +9,69 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     private WeightedQuickUnionUF unionFind;
     private boolean[] opened;
-    private int N;
+    private int n;
     private int openSites;
 
     // creates n-by-n grid, with all sites initially blocked
-    public Percolation(int n) {
-        if (n <= 0) throw new IllegalArgumentException("N is too low");
-        N = n;
+    public Percolation(int num) {
+        if (num <= 0) throw new IllegalArgumentException("n is too low");
+        n = num;
         openSites = 0;
         unionFind = new WeightedQuickUnionUF(n * n + 2);
-        opened = new boolean[N * N + 2];
-        for (int i = 0; i < N * N + 2; i++) opened[i] = false;
+        opened = new boolean[n * n + 2];
+        for (int i = 0; i < n * n + 2; i++) opened[i] = false;
         opened[0] = true;
-        opened[N * N + 1] = true;
+        opened[n * n + 1] = true;
     }
 
     private int rowColToIndex(int row, int col) {
-        return row * N + col + 1;
+        return (row - 1) * n + col;
     }
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
-        if (row < 0 || row >= N)
-            throw new IllegalArgumentException("Row should be between 0 and N-1");
-        if (col < 0 || col >= N)
-            throw new IllegalArgumentException("Row should be between 0 and N-1");
+        checkArgs(row, col);
         if (isOpen(row, col)) return;
         opened[rowColToIndex(row, col)] = true;
         openSites += 1;
-        if (row == 0) unionFind.union(0, rowColToIndex(row, col));
-        if (row == N - 1) unionFind.union(rowColToIndex(row, col), N * N + 1);
-        if (row > 0 && isOpen(row - 1, col)) {
+        if (row == 1) unionFind.union(0, rowColToIndex(row, col));
+        if (row == n) unionFind.union(rowColToIndex(row, col), n * n + 1);
+        if (row > 1 && isOpen(row - 1, col)) {
             unionFind.union(rowColToIndex(row, col),
                             rowColToIndex(row - 1, col));
         }
-        if (row < N - 1 && isOpen(row + 1, col)) {
+        if (row < n && isOpen(row + 1, col)) {
             unionFind.union(rowColToIndex(row, col),
                             rowColToIndex(row + 1, col));
         }
-        if (col > 0 && isOpen(row, col - 1)) {
+        if (col > 1 && isOpen(row, col - 1)) {
             unionFind.union(rowColToIndex(row, col),
                             rowColToIndex(row, col - 1));
         }
-        if (col < N - 1 && isOpen(row, col + 1)) {
+        if (col < n && isOpen(row, col + 1)) {
             unionFind.union(rowColToIndex(row, col),
                             rowColToIndex(row, col + 1));
         }
     }
 
+    private void checkArgs(int r, int c) {
+        if (r <= 0 || r > n)
+            throw new IllegalArgumentException(
+                    "Row should be between 1 and n, got " + Integer.toString(r));
+        if (c <= 0 || c > n)
+            throw new IllegalArgumentException(
+                    "Col should be between 1 and n, got " + Integer.toString(c));
+    }
+
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        if (row < 0 || row >= N)
-            throw new IllegalArgumentException("Row should be between 0 and N-1");
-        if (col < 0 || col >= N)
-            throw new IllegalArgumentException("Row should be between 0 and N-1");
+        checkArgs(row, col);
         return opened[rowColToIndex(row, col)];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        if (row < 0 || row >= N)
-            throw new IllegalArgumentException("Row should be between 0 and N-1");
-        if (col < 0 || col >= N)
-            throw new IllegalArgumentException("Row should be between 0 and N-1");
+        checkArgs(row, col);
         return unionFind.find(0) == unionFind.find(rowColToIndex(row, col));
     }
 
@@ -82,21 +82,8 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return unionFind.find(0) == unionFind.find(N * N + 1);
+        return unionFind.find(0) == unionFind.find(n * n + 1);
     }
 
-    // test client (optional)
-    public static void main(String[] args) {
-        // Percolation per = new Percolation(2);
-        // System.out.println(per.percolates());
-        // per.open(1, 1);
-        // System.out.println(per.percolates());
-        // System.out.println(Arrays.toString(per.opened));
-        // per.open(0, 0);
-        // System.out.println(per.percolates());
-        // System.out.println(Arrays.toString(per.opened));
-        // per.open(0, 1);
-        // System.out.println(per.percolates());
-        // System.out.println(Arrays.toString(per.opened));
-    }
+
 }

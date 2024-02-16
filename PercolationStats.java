@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
 
 /* *****************************************************************************
  *  Name:              Ada Lovelace
@@ -14,7 +15,7 @@ public class PercolationStats {
         for (int i = 0; i < trials; i++) {
             Percolation percolation = new Percolation(n);
             while (!percolation.percolates()) {
-                percolation.open(StdRandom.uniformInt(n), StdRandom.uniformInt(n));
+                percolation.open(1 + StdRandom.uniformInt(n), 1 + StdRandom.uniformInt(n));
             }
             results[i] = percolation.numberOfOpenSites() / Math.pow(n, 2);
         }
@@ -22,23 +23,23 @@ public class PercolationStats {
 
     // sample mean of percolation threshold
     public double mean() {
-        double res = 0;
-        int n = results.length;
-        for (int i = 0; i < n; i++) {
-            res += results[i] / n;
-        }
-        return res;
+        // double res = 0;
+        // int n = results.length;
+        // for (int i = 0; i < n; i++) {
+        //     res += results[i] / n;
+        // }
+        return StdStats.mean(results);
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        double sPow2 = 0;
-        double mean = mean();
-        int n = results.length;
-        for (int i = 0; i < n; i++) {
-            sPow2 += Math.pow((results[i] - mean), 2) / (n - 1);
-        }
-        return Math.sqrt(sPow2);
+        // double sPow2 = 0;
+        // double mean = mean();
+        // int n = results.length;
+        // for (int i = 0; i < n; i++) {
+        //     sPow2 += Math.pow((results[i] - mean), 2) / (n - 1);
+        // }
+        return StdStats.stddev(results);
     }
 
     // low endpoint of 95% confidence interval
